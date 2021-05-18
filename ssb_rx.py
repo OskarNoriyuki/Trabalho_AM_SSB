@@ -74,34 +74,34 @@ class ssb_rx(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.volume = volume = 800m
+        self.volume = volume = 0.8
         self.variable_qtgui_range_0_0_0_0_0_0 = variable_qtgui_range_0_0_0_0_0_0 = 50
         self.variable_qtgui_label_0 = variable_qtgui_label_0 = 0
-        self.tuner = tuner = -1.3k
+        self.tuner = tuner = -1300
         self.samp_rate = samp_rate = 250000
-        self.gain = gain = 10k
+        self.gain = gain = 10000
         self.filter_width = filter_width = 1.2e3
         self.decimate = decimate = 5
         self.center_freq = center_freq = 14.2e6
-        self.agc_decay = agc_decay = 65u
-        self.agc_attack = agc_attack = 100m
+        self.agc_decay = agc_decay = 65e-06
+        self.agc_attack = agc_attack = 0.1
 
         ##################################################
         # Blocks
         ##################################################
-        self._volume_range = Range(0, 1, 10m, 800m, 200)
+        self._volume_range = Range(0, 1, 0.01, 0.8, 200)
         self._volume_win = RangeWidget(self._volume_range, self.set_volume, 'Volume', "slider", float)
         self.top_grid_layout.addWidget(self._volume_win)
-        self._tuner_range = Range(-25k, 25k, 1, -1.3k, 200)
+        self._tuner_range = Range(-25000, 25000, 1000, -1300, 200)
         self._tuner_win = RangeWidget(self._tuner_range, self.set_tuner, 'Tune', "slider", float)
         self.top_grid_layout.addWidget(self._tuner_win)
-        self._gain_range = Range(0, 30k, 1k, 10k, 200)
+        self._gain_range = Range(0, 30000, 1000, 10000, 200)
         self._gain_win = RangeWidget(self._gain_range, self.set_gain, 'Gain', "slider", float)
         self.top_grid_layout.addWidget(self._gain_win)
-        self._agc_decay_range = Range(10u, 100u, 1u, 65u, 200)
+        self._agc_decay_range = Range(10e-06, 100e-06, 1e-06, 65e-06, 200)
         self._agc_decay_win = RangeWidget(self._agc_decay_range, self.set_agc_decay, 'AGC Decay', "counter_slider", float)
         self.top_grid_layout.addWidget(self._agc_decay_win)
-        self._agc_attack_range = Range(100m, 300m, 1m, 100m, 200)
+        self._agc_attack_range = Range(0.1, 0.3, 0.001, 0.1, 200)
         self._agc_attack_win = RangeWidget(self._agc_attack_range, self.set_agc_attack, 'AGC Attack', "counter_slider", float)
         self.top_grid_layout.addWidget(self._agc_attack_win)
         self._variable_qtgui_range_0_0_0_0_0_0_range = Range(0, 100, 1, 50, 200)
@@ -204,7 +204,7 @@ class ssb_rx(gr.top_block, Qt.QWidget):
         self.freq_xlating_fft_filter_ccc_0 = filter.freq_xlating_fft_filter_ccc(decimate, firdes.low_pass(1, 50e3 ,filter_width-200, 300), tuner, samp_rate/decimate)
         self.freq_xlating_fft_filter_ccc_0.set_nthreads(1)
         self.freq_xlating_fft_filter_ccc_0.declare_sample_delay(0)
-        self.blocks_wavfile_source_0 = blocks.wavfile_source('', True)
+        self.blocks_wavfile_source_0 = blocks.wavfile_source('C:\\Users\\oskar\\Desktop\\PRINCÍPIOS\\Trabalho_AM_SSB\\wav_music.wav', True)
         self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
         self.blocks_multiply_xx_1 = blocks.multiply_vff(1)
         self.blocks_multiply_xx_0 = blocks.multiply_vff(1)

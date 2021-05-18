@@ -41,10 +41,10 @@ blocks:
     min_len: '200'
     orient: Qt.Horizontal
     rangeType: float
-    start: 100m
-    step: 1m
-    stop: 300m
-    value: 100m
+    start: '0.1'
+    step: '0.001'
+    stop: '0.3'
+    value: '0.1'
     widget: counter_slider
   states:
     bus_sink: false
@@ -62,10 +62,10 @@ blocks:
     min_len: '200'
     orient: Qt.Horizontal
     rangeType: float
-    start: 10u
-    step: 1u
-    stop: 100u
-    value: 65u
+    start: 10e-06
+    step: 1e-06
+    stop: 100e-06
+    value: 65e-06
     widget: counter_slider
   states:
     bus_sink: false
@@ -120,9 +120,9 @@ blocks:
     orient: Qt.Vertical
     rangeType: float
     start: '0'
-    step: 1k
-    stop: 30k
-    value: 10k
+    step: '1000'
+    stop: '30000'
+    value: '10000'
     widget: slider
   states:
     bus_sink: false
@@ -152,10 +152,10 @@ blocks:
     min_len: '200'
     orient: Qt.Horizontal
     rangeType: float
-    start: -25k
-    step: '1'
-    stop: 25k
-    value: -1.3k
+    start: '-25000'
+    step: '1000'
+    stop: '25000'
+    value: '-1300'
     widget: slider
   states:
     bus_sink: false
@@ -211,9 +211,9 @@ blocks:
     orient: Qt.Horizontal
     rangeType: float
     start: '0'
-    step: 10m
+    step: '0.01'
     stop: '1'
-    value: 800m
+    value: '0.8'
     widget: slider
   states:
     bus_sink: false
@@ -240,7 +240,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [791, 460]
+    coordinate: [778, 454]
     rotation: 0
     state: enabled
 - name: analog_sig_source_x_0
@@ -351,7 +351,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [912, 105]
+    coordinate: [899, 99]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0
@@ -369,7 +369,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [822, 247]
+    coordinate: [809, 241]
     rotation: 180
     state: enabled
 - name: blocks_multiply_const_vxx_1
@@ -451,7 +451,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    file: ''
+    file: "C:\\Users\\oskar\\Desktop\\PRINC\xCDPIOS\\Trabalho_AM_SSB\\wav_music.wav"
     maxoutbuf: '0'
     minoutbuf: '0'
     nchan: '2'
@@ -460,7 +460,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [683, 116]
+    coordinate: [579, 113]
     rotation: 0
     state: enabled
 - name: freq_xlating_fft_filter_ccc_0
@@ -481,7 +481,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 309]
+    coordinate: [739, 303]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
