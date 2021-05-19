@@ -184,13 +184,13 @@ class untitled(gr.top_block, Qt.QWidget):
             1,
             firdes.band_pass(
                 1,
-                1000000,
-                90000,
-                110000,
-                5000,
+                10000000,
+                900000,
+                1100000,
+                50000,
                 firdes.WIN_HAMMING,
                 6.76))
-        self.analog_sig_source_x_1 = analog.sig_source_c(1000000, analog.GR_SIN_WAVE, 100000, 1, 0, 0)
+        self.analog_sig_source_x_1 = analog.sig_source_c(10000000, analog.GR_SIN_WAVE, 1000000, 1, 0, 0)
         self.analog_sig_source_x_0 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, 1000, 1, 0, 0)
 
 

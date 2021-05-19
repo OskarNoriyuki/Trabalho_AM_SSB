@@ -103,19 +103,19 @@ blocks:
     alias: ''
     amp: '1'
     comment: ''
-    freq: '100000'
+    freq: '1000000'
     maxoutbuf: '0'
     minoutbuf: '0'
     offset: '0'
     phase: '0'
-    samp_rate: '1000000'
+    samp_rate: '10000000'
     type: complex
     waveform: analog.GR_SIN_WAVE
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [627, 135]
+    coordinate: [626, 135]
     rotation: 0
     state: true
 - name: band_pass_filter_0
@@ -127,14 +127,14 @@ blocks:
     comment: ''
     decim: '1'
     gain: '1'
-    high_cutoff_freq: '110000'
+    high_cutoff_freq: '1100000'
     interp: '1'
-    low_cutoff_freq: '90000'
+    low_cutoff_freq: '900000'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samp_rate: '1000000'
+    samp_rate: '10000000'
     type: fir_filter_ccf
-    width: '5000'
+    width: '50000'
     win: firdes.WIN_HAMMING
   states:
     bus_sink: false
