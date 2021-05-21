@@ -74,151 +74,135 @@ class ssb_tx_lucas_v1(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.samp_rate = samp_rate = 1000000
+        self.samp_rate = samp_rate = 400E3
         self.input_gain = input_gain = 1
-        self.carrier_freq = carrier_freq = 300000
+        self.carrier_freq = carrier_freq = 50E3
         self.bandwidth = bandwidth = 100000
 
         ##################################################
         # Blocks
         ##################################################
-        self.qtgui_freq_sink_x_0_1 = qtgui.freq_sink_c(
-            1024, #size
-            firdes.WIN_HANN, #wintype
-            0, #fc
-            50000, #bw
-            "Audio", #name
-            1
-        )
-        self.qtgui_freq_sink_x_0_1.set_update_time(0.10)
-        self.qtgui_freq_sink_x_0_1.set_y_axis(-200, 10)
-        self.qtgui_freq_sink_x_0_1.set_y_label('Relative Gain', 'dB')
-        self.qtgui_freq_sink_x_0_1.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
-        self.qtgui_freq_sink_x_0_1.enable_autoscale(False)
-        self.qtgui_freq_sink_x_0_1.enable_grid(False)
-        self.qtgui_freq_sink_x_0_1.set_fft_average(1.0)
-        self.qtgui_freq_sink_x_0_1.enable_axis_labels(True)
-        self.qtgui_freq_sink_x_0_1.enable_control_panel(False)
-
-
-
-        labels = ['', '', '', '', '',
-            '', '', '', '', '']
-        widths = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        colors = ["blue", "red", "green", "black", "cyan",
-            "magenta", "yellow", "dark red", "dark green", "dark blue"]
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0]
-
-        for i in range(1):
-            if len(labels[i]) == 0:
-                self.qtgui_freq_sink_x_0_1.set_line_label(i, "Data {0}".format(i))
-            else:
-                self.qtgui_freq_sink_x_0_1.set_line_label(i, labels[i])
-            self.qtgui_freq_sink_x_0_1.set_line_width(i, widths[i])
-            self.qtgui_freq_sink_x_0_1.set_line_color(i, colors[i])
-            self.qtgui_freq_sink_x_0_1.set_line_alpha(i, alphas[i])
-
-        self._qtgui_freq_sink_x_0_1_win = sip.wrapinstance(self.qtgui_freq_sink_x_0_1.pyqwidget(), Qt.QWidget)
-        self.top_grid_layout.addWidget(self._qtgui_freq_sink_x_0_1_win)
-        self.qtgui_freq_sink_x_0_0 = qtgui.freq_sink_c(
+        self.rational_resampler_xxx_0 = filter.rational_resampler_fff(
+                interpolation=28,
+                decimation=3,
+                taps=None,
+                fractional_bw=0.4)
+        self.qtgui_waterfall_sink_x_2 = qtgui.waterfall_sink_c(
             1024, #size
             firdes.WIN_BLACKMAN_hARRIS, #wintype
-            carrier_freq, #fc
-            bandwidth, #bw
-            "BeforeFilter", #name
-            1
+            0, #fc
+            samp_rate, #bw
+            "", #name
+            1 #number of inputs
         )
-        self.qtgui_freq_sink_x_0_0.set_update_time(0.10)
-        self.qtgui_freq_sink_x_0_0.set_y_axis(-140, 10)
-        self.qtgui_freq_sink_x_0_0.set_y_label('Relative Gain', 'dB')
-        self.qtgui_freq_sink_x_0_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
-        self.qtgui_freq_sink_x_0_0.enable_autoscale(False)
-        self.qtgui_freq_sink_x_0_0.enable_grid(False)
-        self.qtgui_freq_sink_x_0_0.set_fft_average(1.0)
-        self.qtgui_freq_sink_x_0_0.enable_axis_labels(True)
-        self.qtgui_freq_sink_x_0_0.enable_control_panel(False)
+        self.qtgui_waterfall_sink_x_2.set_update_time(0.10)
+        self.qtgui_waterfall_sink_x_2.enable_grid(False)
+        self.qtgui_waterfall_sink_x_2.enable_axis_labels(True)
 
 
 
         labels = ['', '', '', '', '',
-            '', '', '', '', '']
-        widths = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        colors = ["blue", "red", "green", "black", "cyan",
-            "magenta", "yellow", "dark red", "dark green", "dark blue"]
+                  '', '', '', '', '']
+        colors = [0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0]
         alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0]
+                  1.0, 1.0, 1.0, 1.0, 1.0]
 
         for i in range(1):
             if len(labels[i]) == 0:
-                self.qtgui_freq_sink_x_0_0.set_line_label(i, "Data {0}".format(i))
+                self.qtgui_waterfall_sink_x_2.set_line_label(i, "Data {0}".format(i))
             else:
-                self.qtgui_freq_sink_x_0_0.set_line_label(i, labels[i])
-            self.qtgui_freq_sink_x_0_0.set_line_width(i, widths[i])
-            self.qtgui_freq_sink_x_0_0.set_line_color(i, colors[i])
-            self.qtgui_freq_sink_x_0_0.set_line_alpha(i, alphas[i])
+                self.qtgui_waterfall_sink_x_2.set_line_label(i, labels[i])
+            self.qtgui_waterfall_sink_x_2.set_color_map(i, colors[i])
+            self.qtgui_waterfall_sink_x_2.set_line_alpha(i, alphas[i])
 
-        self._qtgui_freq_sink_x_0_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0_0.pyqwidget(), Qt.QWidget)
-        self.top_grid_layout.addWidget(self._qtgui_freq_sink_x_0_0_win)
-        self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
+        self.qtgui_waterfall_sink_x_2.set_intensity_range(-140, 10)
+
+        self._qtgui_waterfall_sink_x_2_win = sip.wrapinstance(self.qtgui_waterfall_sink_x_2.pyqwidget(), Qt.QWidget)
+        self.top_grid_layout.addWidget(self._qtgui_waterfall_sink_x_2_win)
+        self.qtgui_waterfall_sink_x_1 = qtgui.waterfall_sink_c(
             1024, #size
-            firdes.WIN_HANN, #wintype
-            300000, #fc
-            bandwidth, #bw
-            "AfterFilter", #name
-            1
+            firdes.WIN_BLACKMAN_hARRIS, #wintype
+            0, #fc
+            samp_rate, #bw
+            "", #name
+            1 #number of inputs
         )
-        self.qtgui_freq_sink_x_0.set_update_time(0.10)
-        self.qtgui_freq_sink_x_0.set_y_axis(-200, 10)
-        self.qtgui_freq_sink_x_0.set_y_label('Relative Gain', 'dB')
-        self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
-        self.qtgui_freq_sink_x_0.enable_autoscale(False)
-        self.qtgui_freq_sink_x_0.enable_grid(False)
-        self.qtgui_freq_sink_x_0.set_fft_average(1.0)
-        self.qtgui_freq_sink_x_0.enable_axis_labels(True)
-        self.qtgui_freq_sink_x_0.enable_control_panel(False)
+        self.qtgui_waterfall_sink_x_1.set_update_time(0.10)
+        self.qtgui_waterfall_sink_x_1.enable_grid(False)
+        self.qtgui_waterfall_sink_x_1.enable_axis_labels(True)
 
 
 
         labels = ['', '', '', '', '',
-            '', '', '', '', '']
-        widths = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        colors = ["blue", "red", "green", "black", "cyan",
-            "magenta", "yellow", "dark red", "dark green", "dark blue"]
+                  '', '', '', '', '']
+        colors = [0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0]
         alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0]
+                  1.0, 1.0, 1.0, 1.0, 1.0]
 
         for i in range(1):
             if len(labels[i]) == 0:
-                self.qtgui_freq_sink_x_0.set_line_label(i, "Data {0}".format(i))
+                self.qtgui_waterfall_sink_x_1.set_line_label(i, "Data {0}".format(i))
             else:
-                self.qtgui_freq_sink_x_0.set_line_label(i, labels[i])
-            self.qtgui_freq_sink_x_0.set_line_width(i, widths[i])
-            self.qtgui_freq_sink_x_0.set_line_color(i, colors[i])
-            self.qtgui_freq_sink_x_0.set_line_alpha(i, alphas[i])
+                self.qtgui_waterfall_sink_x_1.set_line_label(i, labels[i])
+            self.qtgui_waterfall_sink_x_1.set_color_map(i, colors[i])
+            self.qtgui_waterfall_sink_x_1.set_line_alpha(i, alphas[i])
 
-        self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
-        self.top_grid_layout.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.blocks_wavfile_source_0_0 = blocks.wavfile_source('C:\\Users\\lucas\\OneDrive\\Documentos\\2002_ERE\\Ivan\\TrabalhoPrincipios\\Trabalho_AM_SSB\\sweep.wav', True)
-        self.blocks_repeat_0 = blocks.repeat(gr.sizeof_float*1, 1)
+        self.qtgui_waterfall_sink_x_1.set_intensity_range(-140, 10)
+
+        self._qtgui_waterfall_sink_x_1_win = sip.wrapinstance(self.qtgui_waterfall_sink_x_1.pyqwidget(), Qt.QWidget)
+        self.top_grid_layout.addWidget(self._qtgui_waterfall_sink_x_1_win)
+        self.qtgui_waterfall_sink_x_0 = qtgui.waterfall_sink_c(
+            1024, #size
+            firdes.WIN_BLACKMAN_hARRIS, #wintype
+            0, #fc
+            samp_rate, #bw
+            "", #name
+            1 #number of inputs
+        )
+        self.qtgui_waterfall_sink_x_0.set_update_time(0.10)
+        self.qtgui_waterfall_sink_x_0.enable_grid(False)
+        self.qtgui_waterfall_sink_x_0.enable_axis_labels(True)
+
+
+
+        labels = ['', '', '', '', '',
+                  '', '', '', '', '']
+        colors = [0, 0, 0, 0, 0,
+                  0, 0, 0, 0, 0]
+        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+                  1.0, 1.0, 1.0, 1.0, 1.0]
+
+        for i in range(1):
+            if len(labels[i]) == 0:
+                self.qtgui_waterfall_sink_x_0.set_line_label(i, "Data {0}".format(i))
+            else:
+                self.qtgui_waterfall_sink_x_0.set_line_label(i, labels[i])
+            self.qtgui_waterfall_sink_x_0.set_color_map(i, colors[i])
+            self.qtgui_waterfall_sink_x_0.set_line_alpha(i, alphas[i])
+
+        self.qtgui_waterfall_sink_x_0.set_intensity_range(-140, 10)
+
+        self._qtgui_waterfall_sink_x_0_win = sip.wrapinstance(self.qtgui_waterfall_sink_x_0.pyqwidget(), Qt.QWidget)
+        self.top_grid_layout.addWidget(self._qtgui_waterfall_sink_x_0_win)
+        self.blocks_wavfile_source_0 = blocks.wavfile_source('C:\\Users\\lucas\\OneDrive\\Documentos\\2002_ERE\\Ivan\\TrabalhoPrincipios\\Trabalho_AM_SSB\\wav_music.wav', False)
+        self.blocks_throttle_0_0_0 = blocks.throttle(gr.sizeof_float*1, 44.1e3,True)
         self.blocks_multiply_xx_0 = blocks.multiply_vcc(1)
+        self.blocks_multiply_const_vxx_0_0 = blocks.multiply_const_ff(0.1)
         self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(input_gain)
-        self.blocks_multiply_const_vxx_0.set_block_alias("RF Gain")
         self.blocks_float_to_complex_0 = blocks.float_to_complex(1)
         self.band_pass_filter_0 = filter.fir_filter_ccf(
             1,
             firdes.band_pass(
                 1,
                 samp_rate,
-                300500,
-                325000,
+                50500,
+                70500,
                 400,
                 firdes.WIN_HAMMING,
                 6.76))
-        self.audio_sink_0 = audio.sink(48000, '', True)
+        self.audio_sink_0 = audio.sink(44100, '', True)
         self.analog_sig_source_x_0 = analog.sig_source_c(samp_rate, analog.GR_COS_WAVE, carrier_freq, 1, 0, 0)
         self.analog_const_source_x_0 = analog.sig_source_f(0, analog.GR_CONST_WAVE, 0, 0, 0)
 
@@ -229,15 +213,17 @@ class ssb_tx_lucas_v1(gr.top_block, Qt.QWidget):
         ##################################################
         self.connect((self.analog_const_source_x_0, 0), (self.blocks_float_to_complex_0, 1))
         self.connect((self.analog_sig_source_x_0, 0), (self.blocks_multiply_xx_0, 0))
-        self.connect((self.band_pass_filter_0, 0), (self.qtgui_freq_sink_x_0, 0))
+        self.connect((self.band_pass_filter_0, 0), (self.qtgui_waterfall_sink_x_0, 0))
         self.connect((self.blocks_float_to_complex_0, 0), (self.blocks_multiply_xx_0, 1))
-        self.connect((self.blocks_float_to_complex_0, 0), (self.qtgui_freq_sink_x_0_1, 0))
-        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.blocks_repeat_0, 0))
+        self.connect((self.blocks_float_to_complex_0, 0), (self.qtgui_waterfall_sink_x_2, 0))
+        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.blocks_multiply_const_vxx_0_0, 0))
+        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.rational_resampler_xxx_0, 0))
+        self.connect((self.blocks_multiply_const_vxx_0_0, 0), (self.audio_sink_0, 0))
         self.connect((self.blocks_multiply_xx_0, 0), (self.band_pass_filter_0, 0))
-        self.connect((self.blocks_multiply_xx_0, 0), (self.qtgui_freq_sink_x_0_0, 0))
-        self.connect((self.blocks_repeat_0, 0), (self.audio_sink_0, 0))
-        self.connect((self.blocks_repeat_0, 0), (self.blocks_float_to_complex_0, 0))
-        self.connect((self.blocks_wavfile_source_0_0, 0), (self.blocks_multiply_const_vxx_0, 0))
+        self.connect((self.blocks_multiply_xx_0, 0), (self.qtgui_waterfall_sink_x_1, 0))
+        self.connect((self.blocks_throttle_0_0_0, 0), (self.blocks_multiply_const_vxx_0, 0))
+        self.connect((self.blocks_wavfile_source_0, 0), (self.blocks_throttle_0_0_0, 0))
+        self.connect((self.rational_resampler_xxx_0, 0), (self.blocks_float_to_complex_0, 0))
 
 
     def closeEvent(self, event):
@@ -251,7 +237,10 @@ class ssb_tx_lucas_v1(gr.top_block, Qt.QWidget):
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self.analog_sig_source_x_0.set_sampling_freq(self.samp_rate)
-        self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.samp_rate, 300500, 325000, 400, firdes.WIN_HAMMING, 6.76))
+        self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.samp_rate, 50500, 70500, 400, firdes.WIN_HAMMING, 6.76))
+        self.qtgui_waterfall_sink_x_0.set_frequency_range(0, self.samp_rate)
+        self.qtgui_waterfall_sink_x_1.set_frequency_range(0, self.samp_rate)
+        self.qtgui_waterfall_sink_x_2.set_frequency_range(0, self.samp_rate)
 
     def get_input_gain(self):
         return self.input_gain
@@ -266,15 +255,12 @@ class ssb_tx_lucas_v1(gr.top_block, Qt.QWidget):
     def set_carrier_freq(self, carrier_freq):
         self.carrier_freq = carrier_freq
         self.analog_sig_source_x_0.set_frequency(self.carrier_freq)
-        self.qtgui_freq_sink_x_0_0.set_frequency_range(self.carrier_freq, self.bandwidth)
 
     def get_bandwidth(self):
         return self.bandwidth
 
     def set_bandwidth(self, bandwidth):
         self.bandwidth = bandwidth
-        self.qtgui_freq_sink_x_0.set_frequency_range(300000, self.bandwidth)
-        self.qtgui_freq_sink_x_0_0.set_frequency_range(self.carrier_freq, self.bandwidth)
 
 
 
