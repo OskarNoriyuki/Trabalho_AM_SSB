@@ -32,7 +32,43 @@ options:
     state: enabled
 
 blocks:
-- name: samp_rate
+- name: W
+  id: variable
+  parameters:
+    comment: ''
+    value: 20e03
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [885, 11]
+    rotation: 0
+    state: enabled
+- name: carrier_f
+  id: variable
+  parameters:
+    comment: ''
+    value: 5e05
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [765, 11]
+    rotation: 0
+    state: enabled
+- name: carrier_samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: 20e06
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [598, 9]
+    rotation: 0
+    state: enabled
+- name: message_samp_rate
   id: variable
   parameters:
     comment: ''
@@ -41,7 +77,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [382, 30]
+    coordinate: [414, 17]
     rotation: 0
     state: enabled
 - name: source
@@ -52,11 +88,11 @@ blocks:
     label: Input Select
     label0: Sine Wave
     label1: Music_ch1
-    label2: Music_ch2
+    label2: Realtek_Audio
     label3: ''
     label4: ''
     labels: '[]'
-    num_opts: '2'
+    num_opts: '3'
     option0: '0'
     option1: '1'
     option2: '2'
@@ -71,7 +107,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [31, 30]
+    coordinate: [8, 27]
     rotation: 0
     state: true
 - name: analog_sig_source_x_0
@@ -86,14 +122,14 @@ blocks:
     minoutbuf: '0'
     offset: '0'
     phase: '0'
-    samp_rate: samp_rate
+    samp_rate: message_samp_rate
     type: complex
     waveform: analog.GR_COS_WAVE
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [70, 299]
+    coordinate: [45, 283]
     rotation: 0
     state: true
 - name: analog_sig_source_x_1
@@ -103,22 +139,63 @@ blocks:
     alias: ''
     amp: '1'
     comment: ''
-    freq: '1000000'
+    freq: W/2
     maxoutbuf: '0'
     minoutbuf: '0'
     offset: '0'
     phase: '0'
-    samp_rate: '10000000'
+    samp_rate: message_samp_rate
     type: complex
     waveform: analog.GR_SIN_WAVE
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [626, 135]
+    coordinate: [662, 262]
+    rotation: 180
+    state: true
+- name: analog_sig_source_x_1_1
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '1'
+    comment: ''
+    freq: carrier_f-W/2
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: carrier_samp_rate
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [932, 262]
     rotation: 0
     state: true
-- name: band_pass_filter_0
+- name: audio_source_0
+  id: audio_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    device_name: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_outputs: '1'
+    ok_to_block: 'True'
+    samp_rate: '44100'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [26, 696]
+    rotation: 0
+    state: true
+- name: band_pass_filter_1
   id: band_pass_filter
   parameters:
     affinity: ''
@@ -127,20 +204,70 @@ blocks:
     comment: ''
     decim: '1'
     gain: '1'
-    high_cutoff_freq: '1100000'
+    high_cutoff_freq: '20000'
     interp: '1'
-    low_cutoff_freq: '900000'
+    low_cutoff_freq: '100'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samp_rate: '10000000'
+    samp_rate: message_samp_rate
     type: fir_filter_ccf
-    width: '50000'
+    width: '50'
     win: firdes.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [631, 508]
+    coordinate: [337, 315]
+    rotation: 0
+    state: true
+- name: blocks_add_xx_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1256, 384]
+    rotation: 0
+    state: true
+- name: blocks_complex_to_float_0
+  id: blocks_complex_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [625, 417]
+    rotation: 0
+    state: true
+- name: blocks_complex_to_float_0_0
+  id: blocks_complex_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [942, 425]
     rotation: 0
     state: true
 - name: blocks_float_to_complex_0
@@ -156,7 +283,23 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [368, 452]
+    coordinate: [62, 431]
+    rotation: 0
+    state: true
+- name: blocks_float_to_complex_1
+  id: blocks_float_to_complex
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [53, 607]
     rotation: 0
     state: true
 - name: blocks_multiply_xx_0
@@ -174,7 +317,61 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [674, 312]
+    coordinate: [615, 582]
+    rotation: 0
+    state: true
+- name: blocks_multiply_xx_1
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 182]
+    rotation: 0
+    state: true
+- name: blocks_multiply_xx_1_0
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1182, 178]
+    rotation: 0
+    state: true
+- name: blocks_multiply_xx_1_0_0
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1184, 590]
     rotation: 0
     state: true
 - name: blocks_selector_0
@@ -187,7 +384,7 @@ blocks:
     input_index: source
     maxoutbuf: '0'
     minoutbuf: '0'
-    num_inputs: '2'
+    num_inputs: '3'
     num_outputs: '1'
     output_index: '0'
     showports: 'True'
@@ -197,7 +394,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [367, 300]
+    coordinate: [318, 138]
     rotation: 0
     state: true
 - name: blocks_wavfile_source_0
@@ -215,7 +412,91 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [62, 469]
+    coordinate: [18, 524]
+    rotation: 0
+    state: true
+- name: hilbert_fc_0
+  id: hilbert_fc
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_taps: '65'
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [617, 511]
+    rotation: 0
+    state: true
+- name: hilbert_fc_1
+  id: hilbert_fc
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_taps: '65'
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1009, 510]
+    rotation: 0
+    state: true
+- name: low_pass_filter_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: W/2
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: message_samp_rate
+    type: fir_filter_ccf
+    width: '1000'
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 93]
+    rotation: 0
+    state: true
+- name: low_pass_filter_0_0
+  id: low_pass_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: W/2
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: message_samp_rate
+    type: fir_filter_ccf
+    width: '1000'
+    win: firdes.WIN_HAMMING
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [795, 539]
     rotation: 0
     state: true
 - name: qtgui_freq_sink_x_0
@@ -236,7 +517,7 @@ blocks:
     autoscale: 'False'
     average: '1.0'
     axislabels: 'True'
-    bw: '44100'
+    bw: message_samp_rate
     color1: '"blue"'
     color10: '"dark blue"'
     color2: '"red"'
@@ -295,10 +576,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [353, 173]
+    coordinate: [325, 585]
     rotation: 0
     state: true
-- name: qtgui_freq_sink_x_1
+- name: qtgui_freq_sink_x_1_0
   id: qtgui_freq_sink_x
   parameters:
     affinity: ''
@@ -313,10 +594,10 @@ blocks:
     alpha7: '1.0'
     alpha8: '1.0'
     alpha9: '1.0'
-    autoscale: 'False'
+    autoscale: 'True'
     average: '1.0'
     axislabels: 'True'
-    bw: '300000'
+    bw: carrier_samp_rate
     color1: '"blue"'
     color10: '"dark blue"'
     color2: '"red"'
@@ -368,53 +649,42 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    wintype: firdes.WIN_BLACKMAN_hARRIS
+    wintype: firdes.WIN_HAMMING
     ymax: '10'
     ymin: '-140'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [920, 539]
+    coordinate: [1345, 460]
     rotation: 0
-    state: true
-- name: virtual_sink_0
-  id: virtual_sink
-  parameters:
-    alias: ''
-    comment: ''
-    stream_id: audio
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [868, 320]
-    rotation: 0
-    state: true
-- name: virtual_source_0
-  id: virtual_source
-  parameters:
-    alias: ''
-    comment: ''
-    stream_id: audio
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [371, 572]
-    rotation: 0
-    state: true
+    state: enabled
 
 connections:
 - [analog_sig_source_x_0, '0', blocks_selector_0, '0']
-- [analog_sig_source_x_1, '0', blocks_multiply_xx_0, '0']
-- [band_pass_filter_0, '0', qtgui_freq_sink_x_1, '0']
+- [analog_sig_source_x_1, '0', blocks_complex_to_float_0, '0']
+- [analog_sig_source_x_1, '0', blocks_multiply_xx_1, '1']
+- [analog_sig_source_x_1_1, '0', blocks_complex_to_float_0_0, '0']
+- [analog_sig_source_x_1_1, '0', blocks_multiply_xx_1_0, '1']
+- [audio_source_0, '0', blocks_float_to_complex_1, '0']
+- [band_pass_filter_1, '0', blocks_multiply_xx_0, '1']
+- [band_pass_filter_1, '0', blocks_multiply_xx_1, '0']
+- [band_pass_filter_1, '0', qtgui_freq_sink_x_0, '0']
+- [blocks_add_xx_0, '0', qtgui_freq_sink_x_1_0, '0']
+- [blocks_complex_to_float_0, '0', hilbert_fc_0, '0']
+- [blocks_complex_to_float_0_0, '0', hilbert_fc_1, '0']
 - [blocks_float_to_complex_0, '0', blocks_selector_0, '1']
-- [blocks_multiply_xx_0, '0', virtual_sink_0, '0']
-- [blocks_selector_0, '0', blocks_multiply_xx_0, '1']
-- [blocks_selector_0, '0', qtgui_freq_sink_x_0, '0']
+- [blocks_float_to_complex_1, '0', blocks_selector_0, '2']
+- [blocks_multiply_xx_0, '0', low_pass_filter_0_0, '0']
+- [blocks_multiply_xx_1, '0', low_pass_filter_0, '0']
+- [blocks_multiply_xx_1_0, '0', blocks_add_xx_0, '0']
+- [blocks_multiply_xx_1_0_0, '0', blocks_add_xx_0, '1']
+- [blocks_selector_0, '0', band_pass_filter_1, '0']
 - [blocks_wavfile_source_0, '0', blocks_float_to_complex_0, '0']
-- [virtual_source_0, '0', band_pass_filter_0, '0']
+- [hilbert_fc_0, '0', blocks_multiply_xx_0, '0']
+- [hilbert_fc_1, '0', blocks_multiply_xx_1_0_0, '0']
+- [low_pass_filter_0, '0', blocks_multiply_xx_1_0, '0']
+- [low_pass_filter_0_0, '0', blocks_multiply_xx_1_0_0, '1']
 
 metadata:
   file_format: 1
