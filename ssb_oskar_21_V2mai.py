@@ -78,15 +78,17 @@ class ssb_oskar_21_V2mai(gr.top_block, Qt.QWidget):
         ##################################################
         self.samp_rate = samp_rate = 2000E3
         self.input_gain = input_gain = 1
-        self.f_error = f_error = -0.5
+        self.f_error = f_error = 0
         self.carrier_freq = carrier_freq = 500E3
-        self.bandwidth = bandwidth = 1000000
         self.agc_decay = agc_decay = 65e-06
         self.agc_attack = agc_attack = 0.1
 
         ##################################################
         # Blocks
         ##################################################
+        self._f_error_range = Range(0, 1, 1e-03, 0, 200)
+        self._f_error_win = RangeWidget(self._f_error_range, self.set_f_error, 'frequency deviation (LC error)', "counter_slider", float)
+        self.top_grid_layout.addWidget(self._f_error_win)
         self._agc_decay_range = Range(10e-06, 100e-06, 1e-06, 65e-06, 200)
         self._agc_decay_win = RangeWidget(self._agc_decay_range, self.set_agc_decay, 'AGC Decay', "counter_slider", float)
         self.top_grid_layout.addWidget(self._agc_decay_win)
@@ -210,7 +212,7 @@ class ssb_oskar_21_V2mai(gr.top_block, Qt.QWidget):
             firdes.WIN_BLACKMAN_hARRIS, #wintype
             0, #fc
             samp_rate, #bw
-            "", #name
+            "LOWER SIDEBAND SUPRESSED", #name
             1 #number of inputs
         )
         self.qtgui_waterfall_sink_x_0.set_update_time(0.10)
@@ -261,7 +263,7 @@ class ssb_oskar_21_V2mai(gr.top_block, Qt.QWidget):
         self.blocks_multiply_xx_1 = blocks.multiply_vff(1)
         self.blocks_multiply_xx_0_0 = blocks.multiply_vff(1)
         self.blocks_multiply_xx_0 = blocks.multiply_vff(1)
-        self.blocks_multiply_const_vxx_1 = blocks.multiply_const_ff(1)
+        self.blocks_multiply_const_vxx_1 = blocks.multiply_const_ff(5)
         self.blocks_multiply_const_vxx_0 = blocks.multiply_const_ff(input_gain)
         self.blocks_float_to_complex_2 = blocks.float_to_complex(1)
         self.blocks_float_to_complex_0 = blocks.float_to_complex(1)
@@ -276,7 +278,7 @@ class ssb_oskar_21_V2mai(gr.top_block, Qt.QWidget):
                 samp_rate,
                 carrier_freq+500,
                 carrier_freq+20500,
-                4000,
+                5000,
                 firdes.WIN_HAMMING,
                 6.76))
         self.audio_sink_0_0 = audio.sink(44100, '', True)
@@ -334,7 +336,7 @@ class ssb_oskar_21_V2mai(gr.top_block, Qt.QWidget):
         self.analog_sig_source_x_0.set_sampling_freq(self.samp_rate)
         self.analog_sig_source_x_0_0.set_sampling_freq(self.samp_rate*(1+self.f_error))
         self.analog_sig_source_x_1.set_sampling_freq(self.samp_rate*(1+self.f_error))
-        self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.samp_rate, self.carrier_freq+500, self.carrier_freq+20500, 4000, firdes.WIN_HAMMING, 6.76))
+        self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.samp_rate, self.carrier_freq+500, self.carrier_freq+20500, 5000, firdes.WIN_HAMMING, 6.76))
         self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate*(1+self.f_error), 20000, 6000, firdes.WIN_HAMMING, 6.76))
         self.qtgui_waterfall_sink_x_0.set_frequency_range(0, self.samp_rate)
         self.qtgui_waterfall_sink_x_1.set_frequency_range(0, self.samp_rate)
@@ -366,13 +368,7 @@ class ssb_oskar_21_V2mai(gr.top_block, Qt.QWidget):
         self.analog_sig_source_x_0.set_frequency(self.carrier_freq)
         self.analog_sig_source_x_0_0.set_frequency(self.carrier_freq*(1+self.f_error))
         self.analog_sig_source_x_1.set_frequency(self.carrier_freq*(1+self.f_error))
-        self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.samp_rate, self.carrier_freq+500, self.carrier_freq+20500, 4000, firdes.WIN_HAMMING, 6.76))
-
-    def get_bandwidth(self):
-        return self.bandwidth
-
-    def set_bandwidth(self, bandwidth):
-        self.bandwidth = bandwidth
+        self.band_pass_filter_0.set_taps(firdes.band_pass(1, self.samp_rate, self.carrier_freq+500, self.carrier_freq+20500, 5000, firdes.WIN_HAMMING, 6.76))
 
     def get_agc_decay(self):
         return self.agc_decay
